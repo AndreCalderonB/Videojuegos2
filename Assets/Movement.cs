@@ -13,6 +13,8 @@ public class Movement : MonoBehaviour
 
 
     public bool medic;
+
+    public bool soldado;
     bool active;
     bool move;
     bool shoot;
@@ -24,6 +26,7 @@ public class Movement : MonoBehaviour
     public int MaxMov;
 
     public Image hpbar; 
+    
     public float maxhp;
     public float hp;
 
@@ -40,11 +43,17 @@ public class Movement : MonoBehaviour
     private float currDist;
     private float distPerc;
 
+    public AudioSource SonidoDisparar;
+
     Animator anim;
     GameObject gun;
     Camera camera;
     public GameObject healthpack;
     public RawImage aimcross;
+    public RawImage etiquetaJugador;
+
+    public RawImage etiquetaSoldado;
+
     float probabilidadDeDsiparo;
 
 
@@ -52,6 +61,7 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SonidoDisparar = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         active = false;
         move = false;
@@ -61,7 +71,9 @@ public class Movement : MonoBehaviour
         this.currZ = this.gameObject.transform.position.z;
         gun = this.transform.Find("Bip001").gameObject.transform.Find("Bip001 Pelvis").gameObject.transform.Find("Bip001 Spine").gameObject.transform.Find("Bip001 R Clavicle").gameObject.transform.Find("Bip001 R UpperArm").gameObject.transform.Find("Bip001 R Forearm").gameObject.transform.Find("Bip001 R Hand").gameObject.transform.Find("R_hand_container").gameObject.transform.Find("w_shotgun").gameObject;
         camera = this.transform.Find("cam").gameObject.GetComponent<Camera>();    
-        aimcross.enabled = false;  
+        aimcross.enabled = false;
+        etiquetaJugador.enabled = false;
+        etiquetaSoldado.enabled = false;
     }
 
     // Update is called once per frame
@@ -78,8 +90,10 @@ public class Movement : MonoBehaviour
 
         this.currDist = Mathf.Sqrt((distX*distX) + (distZ * distZ));
 
+        
 
         if (active && move){
+            
             hpbar.fillAmount = ((this.hp * 100) / maxhp) / 100;
             if (MaxMov - currDist <= 0)
             {
@@ -122,11 +136,13 @@ public class Movement : MonoBehaviour
                    anim.SetTrigger("gunO"); 
                    gun.SetActive(true);
                    aimcross.enabled = true;
+                   
                     gunOut = true;
                     anim.SetBool("gunOut", true);
                 }else{
                     gun.SetActive(false);
                     aimcross.enabled = false;
+                    
                     gunOut = false;
                     anim.SetBool("gunOut", false);
                 }
@@ -142,6 +158,7 @@ public class Movement : MonoBehaviour
             {
                 if(gunOut){
                     var ray = camera.ScreenPointToRay(Input.mousePosition);
+                    SonidoDisparar.Play();
                     RaycastHit hit;
                     if(Physics.Raycast(ray, out hit)){
                         if(hit.transform.gameObject.tag == "soldierP1" || hit.transform.gameObject.tag == "soldierP2")
@@ -161,6 +178,28 @@ public class Movement : MonoBehaviour
                     }
                  }
                 anim.SetTrigger("shoot");
+            }
+            var rayEnemigo = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit enemigo;
+            if(Physics.Raycast(rayEnemigo, out enemigo)){
+            if(enemigo.transform.gameObject.tag == "soldierP1" || enemigo.transform.gameObject.tag == "soldierP2"){
+                    Debug.Log("Estoy pegando");
+                    aimcross.color=Color.red;
+                }else{
+                    aimcross.color = Color.black;
+                }
+            }
+            
+            if(medic == true){
+                etiquetaJugador.enabled = true;
+            }else{
+                etiquetaJugador.enabled = false;
+            }
+
+            if(soldado == true){
+                etiquetaSoldado.enabled = true;
+            }else{
+                etiquetaSoldado.enabled = false;
             }
         }
     }
