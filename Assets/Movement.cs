@@ -49,9 +49,13 @@ public class Movement : MonoBehaviour
     GameObject gun;
     Camera camera;
     public GameObject healthpack;
+    private int ContadorDisparos;
+    private bool PowerUp;
     public RawImage aimcross;
     public RawImage etiquetaJugador;
+    public RawImage etiquetapowerUp;
 
+    public Text TextoProbabilidad;
     public RawImage etiquetaSoldado;
 
     float probabilidadDeDsiparo;
@@ -74,6 +78,9 @@ public class Movement : MonoBehaviour
         aimcross.enabled = false;
         etiquetaJugador.enabled = false;
         etiquetaSoldado.enabled = false;
+        etiquetapowerUp.enabled = false;
+        PowerUp = true;
+        ContadorDisparos = 0;
     }
 
     // Update is called once per frame
@@ -163,13 +170,33 @@ public class Movement : MonoBehaviour
                     if(Physics.Raycast(ray, out hit)){
                         if(hit.transform.gameObject.tag == "soldierP1" || hit.transform.gameObject.tag == "soldierP2")
                         {
-                            probabilidadDeDsiparo = Random.Range(0,100);
-                            if(probabilidadDeDsiparo>40){
+                            probabilidadDeDsiparo = Random.Range(0,5) + hit.distance;
+                            ContadorDisparos++;
+                            if(ContadorDisparos == 2){
+                                etiquetapowerUp.enabled = true;
+                            }else{
+                                etiquetapowerUp.enabled = false;
+                            }
+                            if(ContadorDisparos == 3 ){
+                                PowerUp = true;
+                                Debug.Log("powerUp");
+                                probabilidadDeDsiparo = 0;
+                                ContadorDisparos = 0;
+                            }
+                            float disparoImpreso = 100 - probabilidadDeDsiparo * 10;
+                            if(disparoImpreso >= 0){ 
+                                TextoProbabilidad.text = "Probabilidad de impacto: "  + disparoImpreso;
+                            }else{
+                                TextoProbabilidad.text = "Probabilidad de impacto: " + 0;
+
+                            }
+                            if(probabilidadDeDsiparo<10){
                                 Debug.Log("Disparo acertado a " + hit.transform.gameObject.tag);
                                 Animator hitAnim = hit.transform.GetComponent<Animator>();
                                 if(hit.transform.gameObject.GetComponent<Movement>().hp > 0)
                                     hit.transform.gameObject.GetComponent<Movement>().hp -= 50;
                                 hitAnim.SetTrigger("damage");
+                              
 
                             }else{
                                 Debug.Log("Disparo fallado");
@@ -183,7 +210,6 @@ public class Movement : MonoBehaviour
             RaycastHit enemigo;
             if(Physics.Raycast(rayEnemigo, out enemigo)){
             if(enemigo.transform.gameObject.tag == "soldierP1" || enemigo.transform.gameObject.tag == "soldierP2"){
-                    Debug.Log("Estoy pegando");
                     aimcross.color=Color.red;
                 }else{
                     aimcross.color = Color.black;
