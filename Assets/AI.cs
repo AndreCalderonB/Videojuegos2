@@ -89,16 +89,16 @@ public class AI : MonoBehaviour
         if (this.hp <= 0)
         {
             anim.SetTrigger("dead");
-            turnController.GetComponent<Controller>().refreshTeams();
+            turnController.GetComponent<Controller>().deatht2++;
             Destroy(this.gameObject);
-
+            turnController.GetComponent<Controller>().refreshTeams();
         }
         else if (this.hp > 0 && this.hp <= 75)
         {
-            GameObject[] enemigos = GameObject.FindGameObjectsWithTag("soldierP1");
+            GameObject[] healthpacks = GameObject.FindGameObjectsWithTag("healthpack");
             float dist = 1000;
             GameObject closest = null;
-            foreach (GameObject soldier in enemigos)
+            foreach (GameObject soldier in healthpacks)
             {
                 if (Vector3.Distance(soldier.transform.position, transform.position) < dist)
                 {
@@ -107,8 +107,12 @@ public class AI : MonoBehaviour
                 }
             }
             agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-            Vector3 pos = closest.GetComponent<Movement>().getTransform();
-            goal = pos;
+            if (closest != null)
+            {
+                Vector3 pos = closest.transform.position;
+                goal = pos;
+            }
+            
 
             Debug.DrawRay(this.transform.position + new Vector3(0, 1f, 0), transform.forward * 60, Color.green);
             this.currX = this.gameObject.transform.position.x;

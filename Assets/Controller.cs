@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+    public int deatht1 = 0;
+    public int deatht2 = 0;
     int currTeamTurn = 0;
     public bool turnchange = false;
     GameObject[] soldiersP1;
@@ -59,15 +61,15 @@ public class Controller : MonoBehaviour
     //Update is called once per frame
     void Update()
     {
-        print(soldiersP2.Length);
-        if(soldiersP1.Length == 0)
-        {
-            Winner.winner = 1;
-            SceneManager.LoadScene("end");
-        }
-        else if(soldiersP2.Length == 0)
+        print(soldiersP1.Length);
+        if(deatht1 == 2)
         {
             Winner.winner = 2;
+            SceneManager.LoadScene("end");
+        }
+        else if(deatht2 == 2)
+        {
+            Winner.winner = 1;
             SceneManager.LoadScene("end");
         }
         if(currTeamTurn >= soldiersP2.Length)

@@ -89,9 +89,10 @@ public class Movement : MonoBehaviour
         if(this.hp <= 0)
         {
             anim.SetTrigger("dead");
-            turnController.GetComponent<Controller>().refreshTeams();
+            turnController.GetComponent<Controller>().deatht2++;
             Destroy(this.gameObject);
-            
+            turnController.GetComponent<Controller>().refreshTeams();
+
         }
         cameraRot = Input.GetAxis("Mouse X");
 
