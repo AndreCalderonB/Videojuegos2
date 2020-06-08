@@ -16,7 +16,7 @@ public class MenuPrincipal : MonoBehaviour
         
     }
     public void Empezar(){
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("SampleScene");
     }
     public void Cerrar(){
         Application.Quit();
