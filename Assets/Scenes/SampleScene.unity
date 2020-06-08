@@ -258,7 +258,7 @@ PrefabInstance:
     - target: {fileID: 6409250602987049272, guid: 853e6e02261591a4f80d188f72595640,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.94
+      value: -6.31
       objectReference: {fileID: 0}
     - target: {fileID: 6409250602987049272, guid: 853e6e02261591a4f80d188f72595640,
         type: 3}
@@ -3289,6 +3289,7 @@ MonoBehaviour:
   active: 0
   Mov: {fileID: 679032489}
   hpbar: {fileID: 758445842}
+  SonidoDisparar: {fileID: 1292649942}
   maxhp: 150
   hp: 150
 --- !u!82 &1292649941
@@ -3387,6 +3388,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &1292649942 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1377451273521790068, guid: ab13dd96ed18239408c4014dc9060516,
+    type: 3}
+  m_PrefabInstance: {fileID: 1514453325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1427054371 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1425808367876398671, guid: ab13dd96ed18239408c4014dc9060516,
@@ -3436,6 +3443,7 @@ MonoBehaviour:
   active: 0
   Mov: {fileID: 679032489}
   hpbar: {fileID: 758445842}
+  SonidoDisparar: {fileID: 1427054375}
   maxhp: 150
   hp: 150
 --- !u!82 &1427054374
@@ -3534,6 +3542,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &1427054375 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1377451273521790068, guid: ab13dd96ed18239408c4014dc9060516,
+    type: 3}
+  m_PrefabInstance: {fileID: 1502903512}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1431897341
 GameObject:
   m_ObjectHideFlags: 0
@@ -3916,6 +3930,16 @@ PrefabInstance:
       propertyPath: m_TagString
       value: soldierP2
       objectReference: {fileID: 0}
+    - target: {fileID: 1425808367876398919, guid: ab13dd96ed18239408c4014dc9060516,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5899490240560225092, guid: ab13dd96ed18239408c4014dc9060516,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 673702863, guid: ab13dd96ed18239408c4014dc9060516, type: 3}
     - {fileID: 673702865, guid: ab13dd96ed18239408c4014dc9060516, type: 3}
@@ -4040,6 +4064,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: soldierP2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1425808367876495975, guid: ab13dd96ed18239408c4014dc9060516,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5899490240560225092, guid: ab13dd96ed18239408c4014dc9060516,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 673702863, guid: ab13dd96ed18239408c4014dc9060516, type: 3}

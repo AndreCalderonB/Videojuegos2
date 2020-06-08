@@ -29,6 +29,8 @@ public class AI : MonoBehaviour
     Vector3 initgoal;
     public Image hpbar;
 
+    public AudioSource SonidoDisparar;
+
     public float maxhp;
     public float hp;
 
@@ -125,12 +127,13 @@ public class AI : MonoBehaviour
             if (active && move)
             {
                 agent.destination = goal;
+                anim.SetFloat("v", 3);
                 hpbar.fillAmount = ((this.hp * 100) / maxhp) / 100;
                 if (MaxMov - currDist <= 0)
                 {
                     move = false;
                     agent.isStopped = true;
-
+                    anim.SetFloat("v", 0);
                     this.deactivate();
 
                 }
@@ -155,11 +158,13 @@ public class AI : MonoBehaviour
             if (active && move)
             {
                 agent.destination = goal;
+                anim.SetFloat("v", 3);
                 hpbar.fillAmount = ((this.hp * 100) / maxhp) / 100;
                 if (MaxMov - currDist <= 0)
                 {
                     move = false;
                     agent.isStopped = true;
+                    anim.SetFloat("v", 0);
 
                     this.deactivate();
 
@@ -173,12 +178,13 @@ public class AI : MonoBehaviour
                 //print(Vector3.Distance(agent.destination, transform.position));
                 if ((Vector3.Distance(agent.destination, transform.position) < 10f))
                 {
+                    anim.SetTrigger("gunO");
                     Buscar();
                     transform.rotation = Quaternion.LookRotation(goal - transform.position, Vector3.up);
                     agent.isStopped = true;
                     print("Ahi ta prro");
-                    gun.SetActive(true);
-
+                    
+                    anim.SetBool("gunOut",true);
                     //SonidoDisparar.Play();
                     RaycastHit hit;
 
@@ -192,6 +198,7 @@ public class AI : MonoBehaviour
                                 probabilidadDeDsiparo = UnityEngine.Random.Range(0, 5) + hit.distance;
 
                                 float disparoImpreso = 100 - probabilidadDeDsiparo * 10;
+                                SonidoDisparar.Play();
                                 if (disparoImpreso >= 0)
                                 {
                                     TextoProbabilidad.text = "Probabilidad de impacto: " + disparoImpreso;
@@ -218,8 +225,9 @@ public class AI : MonoBehaviour
                             }
                         }
                         shot = true;
+                        anim.SetBool("gunOut", false);
                     }
-                    gun.SetActive(false);
+                    
 
                     this.deactivate();
                 }
