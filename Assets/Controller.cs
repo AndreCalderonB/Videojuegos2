@@ -1,9 +1,13 @@
-﻿    using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+    int currTeamTurn = 0;
+    public bool turnchange = false;
     GameObject[] soldiersP1;
     Camera[] camerasP1;
     GameObject[] soldiersP2;
@@ -55,22 +59,45 @@ public class Controller : MonoBehaviour
     //Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        print(soldiersP2.Length);
+        if(soldiersP1.Length == 0)
         {
+            Winner.winner = 1;
+            SceneManager.LoadScene("end");
+        }
+        else if(soldiersP2.Length == 0)
+        {
+            Winner.winner = 2;
+            SceneManager.LoadScene("end");
+        }
+        if(currTeamTurn >= soldiersP2.Length)
+        {
+            if(soldiersP2.Length!=0)
+            turnchange = true;
+            currTeamTurn = 0;
+            print("Fin de turno npc");
+        }
+        if (turnchange == true)
+        {
+            refreshTeams();
             if (currTurn % 2 == 0)
             {
-                active.GetComponent<Movement>().deactivate();
+                //active.GetComponent<Movement>().deactivate();
                 foreach (Camera cam in camerasP1)
                 {
                     cam.enabled = false;
                 }
-                active = soldiersP2[0];
-                active.GetComponent<Movement>().activate();
-                camerasP2[0].enabled = true;
+               for(int i = 0; i<soldiersP2.Length; i++)
+                {
+                    active = soldiersP2[i];
+                    active.GetComponent<AI>().activate();
+                    camerasP2[i].enabled = true;
+                }
+                
             }
             else
             {
-                active.GetComponent<Movement>().deactivate();
+                //active.GetComponent<AI>().deactivate();
                 foreach (Camera cam in camerasP2)
                 {
                     cam.enabled = false;
@@ -80,6 +107,7 @@ public class Controller : MonoBehaviour
                 camerasP1[0].enabled = true;
             }
             currTurn++;
+            turnchange = false;
         }
         if (currTurn % 2 == 0)
         {
@@ -91,7 +119,9 @@ public class Controller : MonoBehaviour
                     {
                         if (i <= soldiersP1.Length)
                         {
+                            
                             active.GetComponent<Movement>().deactivate();
+                            
                             active = soldiersP1[i - 1];
                             soldiersP1[i - 1].GetComponent<Movement>().activate();
                             camerasP1[i - 1].enabled = true;
@@ -107,31 +137,38 @@ public class Controller : MonoBehaviour
                 }
             }
         }
-        else
+    }
+    public void refreshTeams()
+    {
+        soldiersP1 = GameObject.FindGameObjectsWithTag("soldierP1");
+
+        camerasP1 = new Camera[soldiersP1.Length];
+        for (int i = 0; i < soldiersP1.Length; i++)
         {
-            if (Input.anyKeyDown)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    if (Input.GetKeyDown("" + i))
-                    {
-                        if (i <= soldiersP2.Length)
-                        {
-                            active.GetComponent<Movement>().deactivate();
-                            active = soldiersP2[i - 1];
-                            soldiersP2[i - 1].GetComponent<Movement>().activate();
-                            camerasP2[i - 1].enabled = true;
-                            for (int j = 0; j < camerasP2.Length; j++)
-                            {
-                                if (j != i - 1)
-                                {
-                                    camerasP2[j].enabled = false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            camerasP1[i] = soldiersP1[i].transform.Find("cam").gameObject.GetComponent<Camera>();
+        }
+
+        soldiersP2 = GameObject.FindGameObjectsWithTag("soldierP2");
+        camerasP2 = new Camera[soldiersP2.Length];
+
+        for (int i = 0; i < soldiersP2.Length; i++)
+        {
+            camerasP2[i] = soldiersP2[i].transform.Find("cam").gameObject.GetComponent<Camera>();
+        }
+    }
+    public void ChangeTeamTurn() { 
+        currTeamTurn++;
+        print(currTeamTurn);
+    }
+    public void ChangeTurn()
+    {
+        this.turnchange = true;
+    }
+    public void resetT1()
+    {
+        foreach(GameObject soldier in soldiersP1)
+        {
+            soldier.GetComponent<Movement>().hasActivated = false;
         }
     }
 }
